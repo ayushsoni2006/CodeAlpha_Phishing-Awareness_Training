@@ -1,1 +1,1 @@
-# CodeAlpha_Phishing-Awareness_Training
+# CodeAlpha_Phishing-Awareness-Training
