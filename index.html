@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishShield | Phishing Awareness Training Academy</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="An interactive phishing awareness training module, split-pane email sandbox, quiz, and certificate generator. Learn how to recognize and defend against social engineering.">
+  <meta name="keywords" content="phishing, cyber security training, typosquatting, social engineering, interactive sandbox, cybersecurity certificate">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              bg: '#0b0f19',
+              surface: '#131a2c',
+              surfaceHover: '#1c263f',
+              border: 'rgba(51, 65, 85, 0.4)',
+              primary: '#3b82f6',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="h-full flex flex-col relative select-none">
+  <!-- Background Grid Effect (no-print) -->
+  <div class="cyber-grid no-print"></div>
+
+  <!-- Header Section (no-print) -->
+  <header class="no-print border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center space-x-3">
+      <div class="p-2 bg-gradient-to-tr from-cyan-600 to-indigo-600 rounded-lg shadow-lg">
+        <i data-lucide="shield-alert" class="w-6 h-6 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-wider text-slate-100 flex items-center space-x-2">
+          <span>PHISH</span><span class="text-cyan-400 font-extrabold">SHIELD</span>
+        </h1>
+        <p class="text-xs text-slate-400">Cyber Security Awareness Training</p>
+      </div>
+    </div>
+    
+    <!-- Navigation Status Dots / Map -->
+    <nav class="hidden md:flex items-center space-x-2 text-sm text-slate-400">
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-800/80 border border-slate-700/50 hover:bg-slate-700/50 text-slate-300 font-medium" onclick="navigateTo(0)">1. Intro</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(1)">2. Red Flags</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(2)">3. Tactics</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(3)">4. Best Practices</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(4)">5. Sandbox</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(5)">6. Quiz</span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+      <span class="step-dot cursor-pointer transition px-3 py-1.5 rounded bg-slate-900/50 border border-transparent hover:bg-slate-800/50" onclick="navigateTo(6)">7. Certificate</span>
+    </nav>
+
+    <!-- Theme / Mode Indicators -->
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2 text-xs font-mono bg-cyan-950/40 border border-cyan-800/50 text-cyan-400 px-3 py-1.5 rounded-full">
+        <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-ping"></span>
+        <span>TRAINING MODE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top Progress Bar (no-print) -->
+  <div class="w-full bg-slate-800 h-1.5 sticky top-[73px] z-40 no-print">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 w-[14.28%] transition-all duration-300 shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+  </div>
+
+  <!-- Main Slide Workspace -->
+  <main class="flex-grow flex flex-col justify-center items-center px-4 py-8 md:px-8 max-w-7xl w-full mx-auto overflow-y-auto no-print">
+    
+    <!-- SLIDE 0: INTRODUCTION -->
+    <section id="slide-0" class="slide-pane w-full max-w-5xl slide-enter slide-enter-active flex flex-col justify-center space-y-8">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">MODULE 01: THE CORE THREAT</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Understanding Phishing & Business Impact</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg">
+          Phishing is a highly deceptive social engineering technique where cybercriminals pose as trusted institutions to steal passwords, financial credentials, and proprietary corporate secrets.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col space-y-4 hover:border-cyan-500/50 hover:bg-slate-800/40 transition duration-300">
+          <div class="w-12 h-12 bg-cyan-950/80 border border-cyan-700/40 rounded-xl flex items-center justify-center text-cyan-400 shadow-md">
+            <i data-lucide="mail-open" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-100 font-mono">91% of Breaches</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Over 90% of cyber attacks and successful malware infiltrations initiate from a single, deceptive spear-phishing email.
+          </p>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col space-y-4 hover:border-rose-500/50 hover:bg-slate-800/40 transition duration-300">
+          <div class="w-12 h-12 bg-rose-950/80 border border-rose-700/40 rounded-xl flex items-center justify-center text-rose-400 shadow-md">
+            <i data-lucide="banknote" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-100 font-mono">$4.9M Avg. Cost</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The average global cost of a business data breach caused by phishing is $4.9 million in remediation, legal penalties, and downtime.
+          </p>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col space-y-4 hover:border-blue-500/50 hover:bg-slate-800/40 transition duration-300">
+          <div class="w-12 h-12 bg-blue-950/80 border border-blue-700/40 rounded-xl flex items-center justify-center text-blue-400 shadow-md">
+            <i data-lucide="shield-off" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-100 font-mono">The Human Firewall</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Technology safeguards intercept millions of threats, but final defense relies on the vigilance of the individual.
+          </p>
+        </div>
+      </div>
+
+      <!-- Real-world flow diagram (Mermaid-style layout in HTML) -->
+      <div class="glass-panel p-6 rounded-2xl border-slate-800">
+        <h4 class="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4 text-center font-mono">Anatomy of a Phishing Attack</h4>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+          <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 flex flex-col items-center">
+            <div class="w-8 h-8 rounded-full bg-cyan-900/40 text-cyan-400 flex items-center justify-center font-bold mb-2">1</div>
+            <span class="text-sm font-semibold text-slate-200">Reconnaissance</span>
+            <span class="text-xs text-slate-500 mt-1">Attacker gathers details (names, roles, vendors)</span>
+          </div>
+          <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 flex flex-col items-center">
+            <div class="w-8 h-8 rounded-full bg-blue-900/40 text-blue-400 flex items-center justify-center font-bold mb-2">2</div>
+            <span class="text-sm font-semibold text-slate-200">The Deceptive Lure</span>
+            <span class="text-xs text-slate-500 mt-1">Urgent fake notice spoofing internal tools or banks</span>
+          </div>
+          <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 flex flex-col items-center">
+            <div class="w-8 h-8 rounded-full bg-rose-900/40 text-rose-400 flex items-center justify-center font-bold mb-2">3</div>
+            <span class="text-sm font-semibold text-slate-200">Exploitation</span>
+            <span class="text-xs text-slate-500 mt-1">Victim clicks link, inputs credentials, or runs macro</span>
+          </div>
+          <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800 flex flex-col items-center">
+            <div class="w-8 h-8 rounded-full bg-amber-900/40 text-amber-400 flex items-center justify-center font-bold mb-2">4</div>
+            <span class="text-sm font-semibold text-slate-200">Exfiltration / Breach</span>
+            <span class="text-xs text-slate-500 mt-1">Unauthorized access to corporate emails and databases</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 1: TECHNICAL RED FLAGS -->
+    <section id="slide-1" class="slide-pane w-full max-w-5xl slide-enter hidden flex flex-col space-y-8">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">MODULE 02: TECHNICAL FLAGS</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Recognizing Technical Red Flags</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base">
+          Attackers use sophisticated digital trickery to make malicious sites look completely legitimate. Learn the key components of an email header and domain structure that expose scams.
+        </p>
+      </div>
+
+      <!-- Domain spoofs visual breakdown -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="glass-panel p-6 rounded-2xl space-y-6">
+          <h3 class="text-lg font-bold text-slate-100 flex items-center space-x-2">
+            <i data-lucide="globe" class="text-cyan-400 w-5 h-5"></i>
+            <span>Domain Typosquatting Analyzer</span>
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Attackers register domains that look identical to famous brands by swapping letters, inserting hyphens, or using alternate Top-Level Domains (TLDs). Test your eye on these lookalikes below:
+          </p>
+
+          <div class="space-y-4">
+            <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-mono font-bold text-slate-500">LEGITIMATE DOMAIN</span>
+                <span class="text-xs bg-emerald-950/40 text-emerald-400 border border-emerald-800/40 px-2 py-0.5 rounded">Safe</span>
+              </div>
+              <p class="text-lg font-mono text-emerald-400">https://www.paypal.com</p>
+            </div>
+
+            <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-mono font-bold text-slate-500">LOOKALIKE SCRIPT SWAP</span>
+                <span class="text-xs bg-rose-950/40 text-rose-400 border border-rose-800/40 px-2 py-0.5 rounded">Phishing</span>
+              </div>
+              <p class="text-lg font-mono text-rose-400 flex items-center">
+                <span>https://www.paypa</span>
+                <span class="bg-rose-500/20 text-rose-300 font-bold px-0.5 border border-rose-500/30 rounded mx-0.5">I</span>
+                <span>.com</span>
+              </p>
+              <p class="text-xs text-slate-500 mt-2 font-sans">Contains a capital 'I' (India) instead of a lowercase 'l' (lima). In standard sans-serif fonts, they look identical.</p>
+            </div>
+
+            <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-mono font-bold text-slate-500">SUBDOMAIN SPOOFING</span>
+                <span class="text-xs bg-rose-950/40 text-rose-400 border border-rose-800/40 px-2 py-0.5 rounded">Phishing</span>
+              </div>
+              <p class="text-lg font-mono text-rose-400 flex items-center">
+                <span>https://microsoft.com-security-alert.net</span>
+              </p>
+              <p class="text-xs text-slate-500 mt-2 font-sans">The actual domain is the LAST part before the TLD: <strong class="text-rose-300 font-mono">com-security-alert.net</strong>, NOT <strong class="text-slate-300 font-mono">microsoft.com</strong>. The hyphen hides the truth.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+          <div class="space-y-6">
+            <h3 class="text-lg font-bold text-slate-100 flex items-center space-x-2">
+              <i data-lucide="eye" class="text-cyan-400 w-5 h-5"></i>
+              <span>Core Technical Indicators</span>
+            </h3>
+            
+            <div class="space-y-5">
+              <!-- Point 1 -->
+              <div class="flex space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                  <i data-lucide="user-x" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-slate-200 font-mono">Sender Address Mismatch</h4>
+                  <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                    The Display Name might say "Internal HR" but the underlying email header envelope address shows a generic external account: <code class="text-xs bg-slate-900 text-rose-400 border border-slate-800 px-1 py-0.5 rounded">support@gmail.com</code> or <code class="text-xs bg-slate-900 text-rose-400 border border-slate-800 px-1 py-0.5 rounded">hr-company-alert@secureserver.net</code>.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 2 -->
+              <div class="flex space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                  <i data-lucide="link-2" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-slate-200 font-mono">Hidden Hyperlink Destination</h4>
+                  <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                    The visible text in the email states <code class="text-xs bg-slate-900 text-slate-300 border border-slate-800 px-1 py-0.5 rounded">https://bankofamerica.com/login</code> but the actual HTML href points to <code class="text-xs bg-slate-900 text-rose-400 border border-slate-800 px-1 py-0.5 rounded">http://verify-bankofamerica.net</code>. Always hover to verify.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 3 -->
+              <div class="flex space-x-4">
+                <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                  <i data-lucide="lock-open" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-slate-200 font-mono">Unsecured Connections (HTTP)</h4>
+                  <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                    Phishing landing sites often fail to implement HTTPS protocols, or redirect through HTTP chains, lacking security certificates or utilizing lookalike TLS endpoints.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 p-4 bg-cyan-950/20 border border-cyan-800/40 rounded-xl flex items-center space-x-3">
+            <i data-lucide="info" class="w-5 h-5 text-cyan-400 flex-shrink-0"></i>
+            <p class="text-xs text-cyan-300">
+              <strong>Interactive Tip:</strong> On desktop, hover over links. On mobile devices, long-press a link to inspect the actual destination URL before clicking it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: SOCIAL ENGINEERING TACTICS -->
+    <section id="slide-2" class="slide-pane w-full max-w-5xl slide-enter hidden flex flex-col space-y-8">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">MODULE 03: PSYCHOLOGICAL MANIPULATION</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Social Engineering Tactics</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base">
+          Phishing isn't just a technical problem; it is a psychological attack. Cybercriminals exploit human emotions like urgency, fear, curiosity, and trust to bypass logical defenses.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Pretexting -->
+        <div class="glass-panel p-6 rounded-2xl flex space-x-4 border-slate-800 hover:border-slate-700 transition">
+          <div class="flex-shrink-0 w-12 h-12 bg-blue-950/80 border border-blue-800/50 text-blue-400 rounded-xl flex items-center justify-center shadow-lg">
+            <i data-lucide="user-check" class="w-6 h-6"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-lg font-bold text-slate-100">Pretexting</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Establishing a fabricated story (or pretext) to manipulate target individuals. The attacker often assumes a position of trusted authority, like an external auditor or corporate IT support, asking for temporary password access.
+            </p>
+            <div class="inline-block text-xs bg-slate-900 border border-slate-800 text-cyan-400 px-2 py-1 rounded font-mono">
+              Scenario: "Corporate audit verification requirement"
+            </div>
+          </div>
+        </div>
+
+        <!-- Baiting -->
+        <div class="glass-panel p-6 rounded-2xl flex space-x-4 border-slate-800 hover:border-slate-700 transition">
+          <div class="flex-shrink-0 w-12 h-12 bg-amber-950/80 border border-amber-800/50 text-amber-400 rounded-xl flex items-center justify-center shadow-lg">
+            <i data-lucide="gift" class="w-6 h-6"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-lg font-bold text-slate-100">Baiting</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Offering an enticing item or gift to lure the target into executing malware. This can take digital form (e.g. "Download free salary spreadsheet") or physical form (e.g. leaving a malware-infected flash drive marked "Q4 Salary Allocations" in a corporate office lobby).
+            </p>
+            <div class="inline-block text-xs bg-slate-900 border border-slate-800 text-cyan-400 px-2 py-1 rounded font-mono">
+              Scenario: "Claim corporate bonus payout details"
+            </div>
+          </div>
+        </div>
+
+        <!-- Spear Phishing -->
+        <div class="glass-panel p-6 rounded-2xl flex space-x-4 border-slate-800 hover:border-slate-700 transition">
+          <div class="flex-shrink-0 w-12 h-12 bg-rose-950/80 border border-rose-800/50 text-rose-400 rounded-xl flex items-center justify-center shadow-lg">
+            <i data-lucide="target" class="w-6 h-6"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-lg font-bold text-slate-100">Spear Phishing</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Highly targeted campaigns directed at specific individuals or departments. Attackers customize the email body with authentic data collected from social networks to maximize legitimacy (e.g., targeting the payroll manager using actual vendor names).
+            </p>
+            <div class="inline-block text-xs bg-slate-900 border border-slate-800 text-cyan-400 px-2 py-1 rounded font-mono">
+              Scenario: "Urgent vendor payment request from [Real CEO Name]"
+            </div>
+          </div>
+        </div>
+
+        <!-- Scareware -->
+        <div class="glass-panel p-6 rounded-2xl flex space-x-4 border-slate-800 hover:border-slate-700 transition">
+          <div class="flex-shrink-0 w-12 h-12 bg-red-950/80 border border-red-800/50 text-red-400 rounded-xl flex items-center justify-center shadow-lg">
+            <i data-lucide="bomb" class="w-6 h-6"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-lg font-bold text-slate-100">Scareware</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Exploits fear and panic by bombarding targets with false alarms, warning messages, and system alerts claiming their security is compromised, requiring immediate software downloads or password resets.
+            </p>
+            <div class="inline-block text-xs bg-slate-900 border border-slate-800 text-cyan-400 px-2 py-1 rounded font-mono">
+              Scenario: "IMMEDIATE ACCOUNT SUSPENDED due to violation"
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: DEFENSIVE BEST PRACTICES -->
+    <section id="slide-3" class="slide-pane w-full max-w-5xl slide-enter hidden flex flex-col space-y-8">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">MODULE 04: ACTIONABLE DEFENSE</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Defensive Best Practices</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base">
+          Recognizing the threat is only half the battle. Your immediate response to suspicious activity decides the safety of the entire organization's network. Follow these protocols:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Practice 1 -->
+        <div class="glass-panel p-6 rounded-2xl border-slate-800 flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-950/80 border border-emerald-800/50 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow">
+            <i data-lucide="key-round" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-200">1. Enforce Multi-Factor Authentication (MFA)</h3>
+            <p class="text-xs text-slate-400 leading-relaxed mt-1">
+              Ensure MFA is enabled on all corporate and personal logins. MFA adds an essential layer: even if a phishing link captures your password, the attacker cannot login without your secondary authenticator token.
+            </p>
+          </div>
+        </div>
+
+        <!-- Practice 2 -->
+        <div class="glass-panel p-6 rounded-2xl border-slate-800 flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-950/80 border border-emerald-800/50 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow">
+            <i data-lucide="message-square-dashed" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-200">2. Out-of-Band (OOB) Verification</h3>
+            <p class="text-xs text-slate-400 leading-relaxed mt-1">
+              If an email requests wire transfers, gift card purchases, or sensitive credentials, **do not reply**. Contact the requester using a known, verified channel like a telephone call or internal Microsoft Teams text.
+            </p>
+          </div>
+        </div>
+
+        <!-- Practice 3 -->
+        <div class="glass-panel p-6 rounded-2xl border-slate-800 flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-950/80 border border-emerald-800/50 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow">
+            <i data-lucide="flag" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-200">3. Report Suspicious Activity Immediately</h3>
+            <p class="text-xs text-slate-400 leading-relaxed mt-1">
+              Do not simply delete phishing emails. Use your organization's "Report Phishing" client extension to alert your Security Operations Center (SOC), enabling blocklists that protect coworkers.
+            </p>
+          </div>
+        </div>
+
+        <!-- Practice 4 -->
+        <div class="glass-panel p-6 rounded-2xl border-slate-800 flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-950/80 border border-emerald-800/50 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow">
+            <i data-lucide="mouse-pointer-click" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-200">4. Never Auto-Download Attachments</h3>
+            <p class="text-xs text-slate-400 leading-relaxed mt-1">
+              Configure your email settings to prevent files, images, and macros from loading automatically. Cybercriminals embed hidden scripts within document files that execute immediately upon download.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: "SPOT THE PHISH" INTERACTIVE SANDBOX -->
+    <section id="slide-4" class="slide-pane w-full max-w-6xl slide-enter hidden flex flex-col space-y-6">
+      <div class="text-center space-y-2">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">PRACTICAL LAB</span>
+        <h2 class="text-3xl font-black text-white tracking-tight">Interactive "Spot the Phish" Sandbox</h2>
+        <p class="text-slate-400 max-w-xl mx-auto text-xs md:text-sm">
+          Below is a side-by-side comparison of a Legitimate Account email vs. a Highly Sophisticated Phishing attempt. Review the details and click the <strong class="text-rose-400">red pulsing hotspots</strong> on the right to discover the red flags.
+        </p>
+      </div>
+
+      <!-- Discovery tracker -->
+      <div class="flex justify-between items-center bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <div class="flex items-center space-x-3">
+          <i data-lucide="radar" class="w-5 h-5 text-rose-500 animate-pulse"></i>
+          <span class="text-sm font-semibold text-slate-200 font-mono">Indicators Uncovered:</span>
+          <span id="sandbox-indicator-counter" class="text-sm font-mono text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 border border-cyan-800 rounded">0 / 5</span>
+        </div>
+        <div id="sandbox-progress-message" class="text-xs text-rose-400 font-medium">Find all indicators to proceed!</div>
+      </div>
+
+      <!-- Split Pane Container -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        
+        <!-- LEGITIMATE EMAIL PANEL -->
+        <div class="glass-panel border-emerald-500/20 bg-slate-900/30 rounded-2xl overflow-hidden flex flex-col">
+          <div class="bg-emerald-950/30 border-b border-emerald-800/30 px-4 py-3 flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-emerald-400 flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+              <span>LEGITIMATE CORPORATE CORRESPONDENCE</span>
+            </span>
+            <span class="text-xs text-slate-500">Source Verified</span>
+          </div>
+
+          <!-- Email Simulator Content -->
+          <div class="p-5 flex-grow space-y-4 font-sans text-slate-300 text-sm">
+            <!-- Headers -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/50 space-y-1">
+              <div><strong class="text-slate-400 font-mono">From:</strong> <span class="font-semibold text-slate-100">Microsoft Security Team</span> <code class="text-xs bg-slate-950 text-emerald-400 border border-emerald-900/30 px-1 py-0.5 rounded font-mono">&lt;account-security-noreply@accountprotection.microsoft.com&gt;</code></div>
+              <div><strong class="text-slate-400 font-mono">To:</strong> <span class="text-slate-300">john.doe@company.com</span></div>
+              <div><strong class="text-slate-400 font-mono">Subject:</strong> <span class="text-slate-100 font-semibold">Security alert: Microsoft account password changed</span></div>
+              <div><strong class="text-slate-400 font-mono">Date:</strong> <span class="text-slate-500 font-mono text-xs">2026-07-03 14:02:11 UTC</span></div>
+            </div>
+
+            <!-- Body -->
+            <div class="space-y-4 bg-slate-950/40 p-5 rounded-xl border border-slate-800/40 leading-relaxed">
+              <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <span class="font-bold text-slate-200 text-base font-mono">Microsoft</span>
+                <span class="text-xs text-slate-500 font-mono">ID: #MS-94021</span>
+              </div>
+              <p>Hello John,</p>
+              <p>
+                The password for your Microsoft corporate account <strong class="text-slate-100 font-mono">john.doe@company.com</strong> was recently modified from a browser location near <strong class="text-slate-300">Chicago, IL, USA</strong>.
+              </p>
+              <p>
+                If this action was initiated by you, no further steps are necessary. Your account remains fully secure.
+              </p>
+              <p>
+                If you did not execute this change, please recover your account immediately or notify your system administrator:
+              </p>
+              <div class="py-2">
+                <a href="#" class="inline-block bg-slate-800 text-slate-300 border border-slate-700 px-4 py-2 rounded-lg font-semibold font-mono text-xs cursor-default">
+                  https://account.microsoft.com/activity
+                </a>
+              </div>
+              <p class="text-xs text-slate-500 border-t border-slate-800 pt-3">
+                This is a system generated notification. Replies sent to this address are not monitored.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHISHING EMAIL PANEL -->
+        <div class="glass-panel border-rose-500/20 bg-slate-900/30 rounded-2xl overflow-hidden flex flex-col">
+          <div class="bg-rose-950/30 border-b border-rose-800/30 px-4 py-3 flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-rose-400 flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping"></span>
+              <span>SUSPICIOUS CORRESPONDENCE (INSPECT ME)</span>
+            </span>
+            <span class="text-xs text-rose-400 font-bold font-mono">Phish Target</span>
+          </div>
+
+          <!-- Email Simulator Content with hotspots -->
+          <div class="p-5 flex-grow space-y-4 font-sans text-slate-300 text-sm relative">
+            
+            <!-- Headers -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/50 space-y-1 relative">
+              <!-- Hotspot 1 (Sender Mismatch) -->
+              <button onclick="revealHotspot(1)" id="hotspot-btn-1" class="absolute top-3 right-3 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center pulse-hotspot-rose text-white focus:outline-none transition hover:scale-110 z-10">
+                <span class="text-xs font-bold font-mono">?</span>
+              </button>
+              
+              <div><strong class="text-slate-400 font-mono">From:</strong> <span class="font-semibold text-slate-100">Microsoft Security Alert</span> <code class="text-xs bg-slate-950 text-rose-400 border border-rose-900/30 px-1 py-0.5 rounded font-mono">&lt;security-alert-noreply@microsoft-security-auth.net&gt;</code></div>
+              <div><strong class="text-slate-400 font-mono">To:</strong> <span class="text-slate-300">john.doe@company.com</span></div>
+              
+              <!-- Hotspot 2 (Generic Subject / Urgency) -->
+              <div class="relative">
+                <button onclick="revealHotspot(2)" id="hotspot-btn-2" class="absolute top-0.5 right-3 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center pulse-hotspot-rose text-white focus:outline-none transition hover:scale-110 z-10">
+                  <span class="text-xs font-bold font-mono">?</span>
+                </button>
+                <div><strong class="text-slate-400 font-mono">Subject:</strong> <span class="text-rose-400 font-semibold uppercase">CRITICAL ALERT: Password Expiry - ACT IMMEDIATELY</span></div>
+              </div>
+              
+              <div><strong class="text-slate-400 font-mono">Date:</strong> <span class="text-slate-500 font-mono text-xs">2026-07-03 14:02:11 UTC</span></div>
+            </div>
+
+            <!-- Body -->
+            <div class="space-y-4 bg-slate-950/40 p-5 rounded-xl border border-slate-800/40 leading-relaxed relative">
+              
+              <!-- Hotspot 3 (Generic Greeting) -->
+              <div class="relative">
+                <button onclick="revealHotspot(3)" id="hotspot-btn-3" class="absolute top-0.5 right-3 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center pulse-hotspot-rose text-white focus:outline-none transition hover:scale-110 z-10">
+                  <span class="text-xs font-bold font-mono">?</span>
+                </button>
+                <p>Hello Dear Customer,</p>
+              </div>
+              
+              <!-- Hotspot 4 (Psychological Pressure) -->
+              <div class="relative">
+                <button onclick="revealHotspot(4)" id="hotspot-btn-4" class="absolute top-0.5 right-3 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center pulse-hotspot-rose text-white focus:outline-none transition hover:scale-110 z-10">
+                  <span class="text-xs font-bold font-mono">?</span>
+                </button>
+                <p>
+                  Your Microsoft corporate account password expires within <span class="text-rose-400 font-semibold underline">24 hours</span>. Failure to verify and update your credentials immediately will result in complete account suspension and loss of email communications.
+                </p>
+              </div>
+
+              <!-- Hotspot 5 (Spoofed Hyperlink) -->
+              <div class="relative py-2 border-slate-850">
+                <button onclick="revealHotspot(5)" id="hotspot-btn-5" class="absolute top-2 right-3 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center pulse-hotspot-rose text-white focus:outline-none transition hover:scale-110 z-10">
+                  <span class="text-xs font-bold font-mono">?</span>
+                </button>
+                
+                <p class="mb-2 text-xs text-slate-400">Click below to bypass expiry and keep your current password:</p>
+                <div class="inline-block bg-rose-950/40 text-rose-400 border border-rose-800/40 px-4 py-2 rounded-lg font-semibold font-mono text-xs relative cursor-pointer hover:bg-rose-950/60 transition select-none">
+                  <span>https://account.microsoft.com/reset</span>
+                  <div class="absolute -bottom-8 left-0 bg-slate-900 border border-slate-800 text-[10px] text-rose-400 font-mono px-2 py-1 rounded shadow-lg z-20 whitespace-nowrap">
+                    Destination URL: http://microsoft-auth-verify.com/login.php
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-500 border-t border-slate-800 pt-3">
+                Sincerely, System Administrator.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explanatory Tooltip / Detail Drawer -->
+      <div id="hotspot-details-panel" class="hidden glass-panel border-cyan-800 bg-slate-900/90 rounded-2xl p-6 transition duration-300">
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex items-center space-x-3">
+            <div id="hotspot-badge-container" class="px-3 py-1 bg-rose-950/60 border border-rose-800/60 rounded text-xs font-mono font-bold text-rose-400">
+              HEADER SPOOF
+            </div>
+            <h3 id="hotspot-detail-title" class="text-lg font-bold text-white font-mono">
+              Analyzing Sender Domains
+            </h3>
+          </div>
+          <button onclick="closeHotspotPanel()" class="text-slate-500 hover:text-slate-300">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <p id="hotspot-detail-desc" class="text-sm text-slate-300 leading-relaxed">
+          Click a hotspot button to read details about the malicious red flags.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: ASSESSMENT (QUIZ) -->
+    <section id="slide-5" class="slide-pane w-full max-w-3xl slide-enter hidden flex flex-col space-y-8">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">ASSESSMENT ENGINE</span>
+        <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">Interactive Knowledge Assessment</h2>
+        <p class="text-slate-400 max-w-xl mx-auto text-xs md:text-sm">
+          Complete the following 5-question quiz to test your comprehension. You need a score of 80% (4 out of 5 correct) to qualify for your certificate.
+        </p>
+      </div>
+
+      <!-- Quiz Card -->
+      <div class="glass-panel rounded-3xl p-6 md:p-8 space-y-6 relative">
+        <!-- Progress display inside quiz -->
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-b border-slate-800 pb-4">
+          <span>QUESTION: <strong id="quiz-question-number" class="text-cyan-400 font-bold">1 / 5</strong></span>
+          <span>SCORE REQUIRED: <strong class="text-emerald-400 font-bold">80% (4/5)</strong></span>
+        </div>
+
+        <!-- Question text -->
+        <h3 id="quiz-question-text" class="text-lg md:text-xl font-bold text-slate-100 font-sans leading-snug">
+          If you receive an email from your company's HR department asking you to click a link to verify your personal details, what is the first technical action you should take?
+        </h3>
+
+        <!-- MCQ Options -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Button template -->
+          <button class="w-full text-left p-4 bg-slate-900 border border-slate-800 rounded-xl hover:border-cyan-500/50 hover:bg-slate-800/40 transition duration-200 text-sm font-medium text-slate-300 flex items-center justify-between focus:outline-none">
+            <span>Option Text</span>
+            <i data-lucide="circle" class="w-5 h-5 text-slate-600 flex-shrink-0"></i>
+          </button>
+        </div>
+
+        <!-- Correct/Incorrect explanations -->
+        <div id="quiz-explanation-panel" class="hidden p-5 rounded-2xl flex flex-col space-y-3 transition duration-300">
+          <div class="flex items-center space-x-2">
+            <span id="quiz-explanation-icon" class="text-rose-400"><i data-lucide="alert-circle" class="w-5 h-5"></i></span>
+            <span id="quiz-explanation-title" class="font-bold text-slate-100 font-mono text-sm">INCORRECT ACTION</span>
+          </div>
+          <p id="quiz-explanation-text" class="text-xs text-slate-300 leading-relaxed">
+            Detailed explanation why that action is incorrect/correct.
+          </p>
+        </div>
+
+        <!-- Navigation inside quiz -->
+        <div class="flex justify-between items-center border-t border-slate-800 pt-4">
+          <span class="text-xs text-slate-500 font-mono" id="quiz-tracker-text">Questions submitted: 0/5</span>
+          <button id="quiz-action-btn" class="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-bold px-6 py-2.5 rounded-xl transition font-mono text-sm shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center space-x-2" disabled>
+            <span>Submit Answer</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-900"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CERTIFICATE SCREEN -->
+    <section id="slide-6" class="slide-pane w-full max-w-4xl slide-enter hidden flex flex-col items-center justify-center space-y-8">
+      
+      <!-- Passing state -->
+      <div id="cert-success-view" class="w-full flex flex-col items-center space-y-6">
+        <div class="text-center space-y-2">
+          <div class="w-16 h-16 bg-emerald-950 border border-emerald-500/50 rounded-full flex items-center justify-center text-emerald-400 mx-auto shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            <i data-lucide="award" class="w-8 h-8"></i>
+          </div>
+          <h2 class="text-3xl font-black text-white tracking-tight mt-4">Module Successfully Completed!</h2>
+          <p class="text-slate-400 max-w-md mx-auto text-xs md:text-sm">
+            Outstanding job. You have completed the training course and verified your understanding. Enter your name below to generate your certification.
+          </p>
+        </div>
+
+        <!-- Input for certificate name -->
+        <div class="glass-panel p-6 rounded-2xl border-slate-800 max-w-md w-full flex flex-col space-y-3">
+          <label for="student-name-input" class="text-xs font-mono text-slate-400">ENTER YOUR FULL NAME FOR CERTIFICATION:</label>
+          <div class="relative">
+            <input type="text" id="student-name-input" value="Jane Doe" placeholder="Jane Doe" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm font-semibold focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-sans">
+            <i data-lucide="user" class="absolute right-4 top-3.5 w-5 h-5 text-slate-500"></i>
+          </div>
+        </div>
+
+        <!-- The Visual Certificate Card (Matches Web Screen and Prints Beautifully) -->
+        <div class="w-full flex justify-center">
+          <div id="cert-element" class="certificate-card border-8 border-double border-cyan-800/80 bg-slate-950 p-8 md:p-12 rounded-3xl w-full max-w-3xl text-center space-y-8 relative overflow-hidden shadow-2xl">
+            <!-- Decorative corner pieces -->
+            <div class="absolute top-4 left-4 border-t-2 border-l-2 border-cyan-500/40 w-8 h-8"></div>
+            <div class="absolute top-4 right-4 border-t-2 border-r-2 border-cyan-500/40 w-8 h-8"></div>
+            <div class="absolute bottom-4 left-4 border-b-2 border-l-2 border-cyan-500/40 w-8 h-8"></div>
+            <div class="absolute bottom-4 right-4 border-b-2 border-r-2 border-cyan-500/40 w-8 h-8"></div>
+            
+            <div class="space-y-4">
+              <div class="flex items-center justify-center space-x-2 text-cyan-400 font-mono tracking-widest text-xs font-bold uppercase">
+                <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+                <span>PhishShield Certificate of Achievement</span>
+              </div>
+              <h3 class="text-2xl md:text-4xl font-extrabold text-slate-100 uppercase tracking-wide font-sans">
+                CERTIFICATE OF COMPLETION
+              </h3>
+              <p class="text-xs text-slate-400 italic">This document confirms the successful completion of the course:</p>
+              <h4 class="text-lg md:text-xl font-bold font-mono text-cyan-400">Phishing Awareness & Tactical Social Engineering Defense</h4>
+            </div>
+
+            <div class="py-6 border-y border-slate-900/80 max-w-lg mx-auto">
+              <span class="text-slate-500 text-xs font-mono block mb-2 uppercase tracking-widest">PROUDLY PRESENTED TO:</span>
+              <!-- Target element updated live -->
+              <span id="cert-student-name" class="text-2xl md:text-4xl font-black text-slate-100 tracking-tight font-sans block underline decoration-cyan-500/60 decoration-wavy underline-offset-8">
+                Jane Doe
+              </span>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-slate-400 text-xs font-mono max-w-2xl mx-auto pt-4">
+              <div class="text-center md:text-left">
+                <span class="block text-[10px] text-slate-500">COMPLETION DATE:</span>
+                <strong class="text-slate-300 font-semibold" id="cert-date">2026-07-03</strong>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="w-12 h-12 bg-gradient-to-tr from-cyan-950 to-indigo-950 rounded-full border border-cyan-700/40 flex items-center justify-center text-cyan-400 shadow-md">
+                  <i data-lucide="shield" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[9px] text-slate-500 mt-1 uppercase">Academy verified</span>
+              </div>
+              <div class="text-center md:text-right">
+                <span class="block text-[10px] text-slate-500">CREDENTIAL ID:</span>
+                <strong class="text-slate-300 font-semibold" id="cert-credential-id">PS-84029-A7</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Button Controls -->
+        <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+          <button onclick="printCertificate()" class="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-bold px-6 py-3 rounded-xl transition font-mono text-sm shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center space-x-2">
+            <i data-lucide="printer" class="w-4 h-4 text-slate-900"></i>
+            <span>Print / Save PDF</span>
+          </button>
+          <button onclick="restartTraining()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-6 py-3 rounded-xl border border-slate-700/50 transition font-mono text-sm flex items-center space-x-2">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span>Restart Modules</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Failing state -->
+      <div id="cert-fail-view" class="hidden w-full flex flex-col items-center space-y-6 text-center">
+        <div class="w-16 h-16 bg-rose-950 border border-rose-500/50 rounded-full flex items-center justify-center text-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+          <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+        </div>
+        <h2 class="text-3xl font-black text-white tracking-tight mt-4">Assessment Unsuccessful</h2>
+        <p class="text-slate-400 max-w-md mx-auto text-xs md:text-sm">
+          You scored <strong id="fail-score-text" class="text-rose-400">60%</strong>. A minimum score of 80% (4/5) is required to unlock your PhishShield certification.
+        </p>
+        <button onclick="restartQuiz()" class="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-bold px-6 py-3 rounded-xl transition font-mono text-sm shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center space-x-2">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-900"></i>
+          <span>Retry Assessment</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- PRINT ONLY CERTIFICATE WRAPPER (Renders clean for printing layout) -->
+  <div class="hidden print-only print-container">
+    <div id="print-cert-element" class="certificate-card border-8 border-double border-blue-900 p-12 text-center space-y-8 bg-white text-black">
+      <div class="space-y-4">
+        <div class="flex items-center justify-center space-x-2 text-blue-900 font-mono tracking-widest text-xs font-bold uppercase">
+          <span>PhishShield Certificate of Achievement</span>
+        </div>
+        <h3 class="text-4xl font-extrabold text-blue-900 uppercase tracking-wide font-sans">
+          CERTIFICATE OF COMPLETION
+        </h3>
+        <p class="text-xs text-gray-500 italic">This document confirms the successful completion of the course:</p>
+        <h4 class="text-xl font-bold font-mono text-blue-800">Phishing Awareness & Tactical Social Engineering Defense</h4>
+      </div>
+
+      <div class="py-6 border-y border-gray-300 max-w-lg mx-auto">
+        <span class="text-gray-500 text-xs font-mono block mb-2 uppercase tracking-widest">PROUDLY PRESENTED TO:</span>
+        <span id="print-cert-student-name" class="text-4xl font-black text-black tracking-tight font-sans block underline decoration-blue-900 decoration-wavy underline-offset-8">
+          Jane Doe
+        </span>
+      </div>
+
+      <div class="flex justify-between items-center text-gray-600 text-xs font-mono max-w-2xl mx-auto pt-4">
+        <div>
+          <span class="block text-[10px] text-gray-500">COMPLETION DATE:</span>
+          <strong id="print-cert-date">2026-07-03</strong>
+        </div>
+        <div>
+          <span class="block text-[10px] text-gray-500">CREDENTIAL ID:</span>
+          <strong id="print-cert-credential-id">PS-84029-A7</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Panel (no-print) -->
+  <footer class="no-print border-t border-slate-800 bg-slate-900/60 backdrop-blur-md px-6 py-4 flex items-center justify-between z-40">
+    <button id="prev-btn" onclick="prevSlide()" class="px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-100 text-sm font-semibold font-mono flex items-center space-x-2 transition duration-200" disabled>
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      <span>Previous</span>
+    </button>
+    <div id="slide-indicators-text" class="text-xs text-slate-500 font-mono font-semibold">
+      SLIDE 1 OF 7
+    </div>
+    <button id="next-btn" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-900 text-sm font-semibold font-mono flex items-center space-x-2 transition duration-200">
+      <span>Next</span>
+      <i data-lucide="arrow-right" class="w-4 h-4 text-slate-900"></i>
+    </button>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
